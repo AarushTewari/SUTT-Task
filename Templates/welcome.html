@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <title>Hospital Management System</title>
+  <link rel="icon" href="images/favicon.ico">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <link rel = stylesheet href = "//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+  <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+</head>
+<body style="background-color: #f0f1f2;">
+<div>
+    <h1 style="align-items: center;"> Welcome {{user.username}}</h1>
+    <a href="/accounts/logout"><button class="btn-danger">Logout</button></a>
+    <a href="/change_profile"><button class="btn-primary">Create/Update Profile</button></a>
+    <a href="/profile"><button class="btn-primary">View Profile</button></a>
+    
+</div>
+{% block body %}
+{% endblock %}
+</body></html>

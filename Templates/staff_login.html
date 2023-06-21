@@ -1,0 +1,19 @@
+<style>
+    h3{
+        color: red;
+    }
+</style>
+
+{% for message in messages %}
+<h3> message</h3>
+{% endfor %}
+
+
+<form action="staff_login" method="POST">
+    {% csrf_token %}
+    <label>Username</label>
+    <input type="text" name="username">
+    <label>Password</label>
+    <input type="password" name="password">
+    <input type="submit">
+</form>

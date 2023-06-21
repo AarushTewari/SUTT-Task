@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Appointment</title>
+</head>
+<body>
+    {% if error == "No" %}
+        <script>
+            alert("Appointment created successfully.");
+        </script>
+    {% elif error == "Yes" %}
+        <script>
+            alert("Failed to create appointment.");
+        </script>
+    {% elif error == "Patient does not exsist" %}
+        <script>
+            alert("Patient does not exsist")
+        </script>
+    {% endif %}
+
+    <h1>Add Appointment</h1>
+    <form method="post" action="add_appointment">
+        {% csrf_token %}
+        <label for="patient">Patient:</label>
+        <input type="text" name="patient">
+
+        <label for="doctor">Select a color:</label>
+         <select id="doctor" name="doctor">
+            <option value="oncologist">Oncologist</option>
+            <option value="ent">ENT</option>
+            <option value="cardiologist">Cardiologist</option>
+            <option value="neurologist">Neurologist</option>
+            <option value="orthologist">Orthologist</option>
+        </select>
+
+        <label for="date">Date:</label>
+        <input type="date" name="date" id="date"/><br>
+
+        <label for="time">Time:</label>
+        <input type="time" name="time" id="time"/><br>
+
+        <label for="complain">Complain:</label>
+        <input type="text" name="complain" id="complain"/><br>
+
+        <input type="submit">
+    </form>
+</body>
+</html>
