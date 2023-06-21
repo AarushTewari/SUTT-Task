@@ -58,6 +58,7 @@ def profile(request):
     return render(request, 'profile.html', {'patient': patient})
 
 def staff_login(request):# i haven't added a staff signup option because staff will be added from admin panel, obviously we dont want rsndom people accessing the site and signing up as staff
+ # to login as staff use username = aarush and password = Password5205
     if request.method == 'POST':
         u = request.POST['username']
         p = request.POST['password']
