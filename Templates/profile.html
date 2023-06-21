@@ -1,18 +1,21 @@
-<div>
-    <h1>
-        Name: {{ patient.name }}
-    </h1>
-    <h2>
-        Age: {{ patient.age }}
-    </h2>
-    <h2>
-        Gender: {{ patient.gender }}
-    </h2>
-    <h3>
-        Email: {{ patient.email }}
-    </h3>
-    <p>
-        Address: {{ patient.address }}
-    </p>
-    <a href="/add_appointment"><button class="btn-success">Add appointment</button></a>
-</div>
+<div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">Name: {{ patient.name }}</h1>
+        <h2 class="card-subtitle mb-3">Age: {{ patient.age }}</h2>
+        <h2 class="card-subtitle mb-3">Gender: {{ patient.gender }}</h2>
+        <h3 class="card-text">Email: {{ patient.email }}</h3>
+        <p class="card-text">Address: {{ patient.address }}</p>
+        <a href="/add_appointment" class="btn btn-success">Add Appointment</a>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  
+  <!-- Include Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
