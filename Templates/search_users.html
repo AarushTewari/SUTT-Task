@@ -1,0 +1,21 @@
+<h1 style="text-align: center; font-size: 24px; font-weight: bold;">Patient Search</h1>
+
+<form method="GET" style="margin-top: 20px;">
+  <div style="display: flex; justify-content: center;">
+    <div style="width: 300px;">
+      {{ form.as_p }}
+      <input type="submit" value="Search" style="margin-top: 10px; width: 100%;" class="btn btn-primary">
+    </div>
+  </div>
+</form>
+
+{% if results %}
+  <h2 style="text-align: center; margin-top: 30px; font-size: 18px; font-weight: bold;">Search Results:</h2>
+  <ul style="margin-top: 10px;">
+    {% for user in results %}
+      <li style="margin-bottom: 5px;">{{ user }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p style="text-align: center; margin-top: 30px; font-size: 18px;">No results found.</p>
+{% endif %}
