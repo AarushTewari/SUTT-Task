@@ -3,12 +3,15 @@
 {% block body %}
 
 <head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style media="screen">
     .jumbotron {
-      width : 100;
-      height : 550px;
+      width: 100%;
+      height: 550px;
       background-size: cover;
       background-repeat: no-repeat;
+      display: flex;
+      align-items: center;
     }
 
     .jumbotron h5,
@@ -16,37 +19,30 @@
       text-align: center;
     }
 
-
-    .alert {
-      margin: 0px;
-    }
-
-    .glow {
-      font-size: 50px;
-      color: black;
-      margin-right : 5px;
-      text-align: center;
-      -webkit-animation: glow 1s ease-in-out infinite alternate;
-      -moz-animation: glow 1s ease-in-out infinite alternate;
-      animation: glow 1s ease-in-out infinite alternate;
+    .btn-login {
+      margin-top: 10px;
     }
   </style>
 </head>
 <br>
 <br>
 
-<div class="jumbotron" style="margin-bottom: 0px;margin-top: 0px;">
-  <br><br>
-  <div style="display: flex; column-count: 2; column-gap: 500px;">
-    <div>
-        <h3 class="mb-4">Patient Signup/Login</h3><br>
-        <a href="/login"><button class="btn-success">Login</button></a>
-    </div>
-    <div>
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 d-flex flex-column align-items-center">
+        <h3 class="mb-4">Patient Signup/Login</h3>
+        <a href="/login" class="btn btn-success btn-login">Login</a>
+      </div>
+      <div class="col-md-6 d-flex flex-column align-items-center">
         <h3 class="mb-4">Staff Login</h3>
-        <a href="/staff_login"><button class="btn-primary">Login</button></a>
+        <a href="/staff_login" class="btn btn-primary btn-login">Login</a>
+      </div>
     </div>
   </div>
-  <br><br><br><br>
 </div>
-{% endblock%}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
