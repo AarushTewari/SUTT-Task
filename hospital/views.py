@@ -1,5 +1,8 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect, get_object_or_404
 from .models import Patient, Appointment, Staff
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+from .forms import PatientSearchForm
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
@@ -17,7 +20,8 @@ def patient_login(request):
 @login_required
 def welcome(request):
     user = request.user
-    return render(request, 'welcome.html', {'user': user}) 
+    patient = Patient.objects.get(email = user.email)
+    return render(request, 'welcome.html', {'user': user, 'patient': patient}) 
 
 @receiver(user_logged_in)
 def create_patient(sender, user, request, **kwargs):
@@ -49,9 +53,8 @@ def changeprofile(request):
 
     return render(request, 'changeprofile.html', {'patient': patient})
 
-@login_required
 def profile(request):
-    patient = Patient.objects.get(email=request.user.email)
+    patient = get_object_or_404(Patient)
     return render(request, 'profile.html', {'patient': patient})
 
 def staff_login(request):# i haven't added a staff signup option because staff will be added from admin panel, obviously we dont want rsndom people accessing the site and signing up as staff
@@ -100,5 +103,18 @@ def view_appointment(request):
     appointments = Appointment.objects.all()
     return render(request, 'appointments.html', {'appointments': appointments})
 
+def search_patients(request):
+    form = PatientSearchForm()
+    results = []
 
+    if request.method == 'GET':
+        form = PatientSearchForm(request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            patients = Patient.objects.all()
+            patient_names = [patient.name for patient in patients]
+            extracted_results = process.extract(query, patient_names, scorer=fuzz.token_sort_ratio, limit=10)
+            matched_names = [result[0] for result in extracted_results if result[1] >= 70]
+            results = patients.filter(name__in=matched_names)
 
+    return render(request, 'search_users.html', {'form': form, 'results': results})
