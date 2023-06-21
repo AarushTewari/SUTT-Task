@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Add Appointment</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     {% if error == "No" %}
@@ -12,37 +14,50 @@
         <script>
             alert("Failed to create appointment.");
         </script>
-    {% elif error == "Patient does not exsist" %}
+    {% elif error == "Patient does not exist" %}
         <script>
-            alert("Patient does not exsist")
+            alert("Patient does not exist");
         </script>
     {% endif %}
 
-    <h1>Add Appointment</h1>
-    <form method="post" action="add_appointment">
-        {% csrf_token %}
-        <label for="patient">Patient:</label>
-        <input type="text" name="patient">
+    <div class="container mt-5">
+        <h1 class="mb-4">Add Appointment</h1>
+        <form method="post" action="add_appointment">
+            {% csrf_token %}
 
-        <label for="doctor">Select a color:</label>
-         <select id="doctor" name="doctor">
-            <option value="oncologist">Oncologist</option>
-            <option value="ent">ENT</option>
-            <option value="cardiologist">Cardiologist</option>
-            <option value="neurologist">Neurologist</option>
-            <option value="orthologist">Orthologist</option>
-        </select>
+            <div class="form-group">
+                <label for="patient">Patient:</label>
+                <input type="text" class="form-control" name="patient">
+            </div>
 
-        <label for="date">Date:</label>
-        <input type="date" name="date" id="date"/><br>
+            <div class="form-group">
+                <label for="doctor">Doctor:</label>
+                <select class="form-control" id="doctor" name="doctor">
+                    <option value="oncologist">Oncologist</option>
+                    <option value="ent">ENT</option>
+                    <option value="cardiologist">Cardiologist</option>
+                    <option value="neurologist">Neurologist</option>
+                    <option value="orthologist">Orthologist</option>
+                </select>
+            </div>
 
-        <label for="time">Time:</label>
-        <input type="time" name="time" id="time"/><br>
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" class="form-control" name="date" id="date">
+            </div>
 
-        <label for="complain">Complain:</label>
-        <input type="text" name="complain" id="complain"/><br>
+            <div class="form-group">
+                <label for="time">Time:</label>
+                <input type="time" class="form-control" name="time" id="time">
+            </div>
 
-        <input type="submit">
-    </form>
+            <div class="form-group">
+                <label for="complain">Complain:</label>
+                <input type="text" class="form-control" name="complain" id="complain">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
