@@ -55,31 +55,6 @@
 <body>
 
 <br><br><br><br>
-    <form method="post">
-    {% csrf_token %}
-    <div class="container register-form mt-2" style="width : 600px;">
-      <div class="form">
-        <div class="note">
-          <p>Patient Login</p>
-        </div>
-
-        <div class="form-content">
-          <div class="row mt-5">
-
-            <div class="col-md-12">
-              <div class="form-group">
-                  <input type="text" name="uname" class="form-control py-3" placeholder="Enter User Name">
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <div class="form-group">
-                <input type="password" name="pwd" class="form-control py-3" placeholder="Enter Password"><br>
-              </div>
-            </div>
-
-          </div>
-          <button type="submit" class="btnSubmit">Login</button>
           <button class="btn btn-outline-info">
             <a href="{% provider_login_url 'google'%}?next=/welcome">
                 <i class="fab fa-google"></i>
