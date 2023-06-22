@@ -1,0 +1,55 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+<style>
+    .card {
+        margin: 20px auto;
+        max-width: 500px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .heading-primary {
+        color: #000;
+        font-weight: bold;
+    }
+
+    .heading-secondary {
+        color: #000;
+    }
+
+    .heading-tertiary {
+        color: #000;
+        font-weight: bold;
+    }
+
+    h1, h4 {
+        margin-bottom: 10px;
+    }
+
+    p {
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1 class="text-center heading-primary">Patient:</h1>
+                    <h2 class="text-center heading-secondary">{{ appointment.patient }}</h2>
+                    <h1 class="text-center heading-primary">Doctor:</h1>
+                    <h2 class="text-center heading-secondary">{{ appointment.doctor }}</h2>
+                    <h1 class="text-center heading-primary">Date and Time:</h1>
+                    <h2 class="text-center heading-secondary">{{ appointment.date1 }} {{ appointment.time1 }}</h2>
+                    <h1 class="text-center heading-primary">Complain:</h1>
+                    <p class="text-center">{{ appointment.complain }}</p>
+                    <h4 class="text-center heading-tertiary">Status: {{ appointment.status }}</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
