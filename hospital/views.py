@@ -59,9 +59,7 @@ def profile(request, patient_name):
         patient = Patient.objects.get(name=patient_name)
         return render(request, 'profile.html', {'patient': patient})
     except Patient.DoesNotExist:
-        error_message = f"Patient '{patient_name}' not found."
-        alert_script = f"<script>alert('{error_message}');</script>"
-        return HttpResponse(alert_script)
+        return HttpResponse('Such profile doesnot exist')
 
 def welcomestaff(request):
     return render(request, 'welcomestaff.html')
@@ -124,3 +122,10 @@ def search_patients(request):
             results = patients.filter(name__in=matched_names)
 
     return render(request, 'search_users.html', {'form': form, 'results': results})
+
+def see_appointment(request, id):
+    try:
+        appointment = Appointment.objects.get(id=id)
+        return render(request, 'see_appointment.html', {'appointment': appointment})
+    except Appointment.DoesNotExist:
+        return HttpResponse('Such appointment does not exist')
