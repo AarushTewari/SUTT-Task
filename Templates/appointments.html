@@ -26,14 +26,15 @@
 
 			<tbody>
             {% for i in appointments %}
-			<tr>
+			  <tr>
 				<td>{{i.doctor}}</td>
 				<td>{{i.patient}}</td>
 				<td>{{i.date1}}</td>
 				<td>{{i.time1}}</td>
-                <td>{{i.status}}</td>
-				
-			</tr>
+                		<td>{{i.status}}</td>
+				<td><a href="{% url 'hospital:see_appointment' i.id %}"> View </a></td>
+			  </tr>
+			
 			{% endfor %}
 			</tbody>
 		</table>
