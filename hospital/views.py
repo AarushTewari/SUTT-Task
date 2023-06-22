@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponse
 
 # Create your views here.
 
@@ -49,16 +50,23 @@ def changeprofile(request):
         patient.address = address
 
         patient.save()
-        return redirect('profile')
+        return redirect('/welcome')
 
     return render(request, 'changeprofile.html', {'patient': patient})
 
-def profile(request):
-    patient = get_object_or_404(Patient)
-    return render(request, 'profile.html', {'patient': patient})
+def profile(request, patient_name):
+    try:
+        patient = Patient.objects.get(name=patient_name)
+        return render(request, 'profile.html', {'patient': patient})
+    except Patient.DoesNotExist:
+        error_message = f"Patient '{patient_name}' not found."
+        alert_script = f"<script>alert('{error_message}');</script>"
+        return HttpResponse(alert_script)
+
+def welcomestaff(request):
+    return render(request, 'welcomestaff.html')
 
 def staff_login(request):# i haven't added a staff signup option because staff will be added from admin panel, obviously we dont want rsndom people accessing the site and signing up as staff
- # to login as staff use username = aarush and password = Password5205
     if request.method == 'POST':
         u = request.POST['username']
         p = request.POST['password']
@@ -66,7 +74,7 @@ def staff_login(request):# i haven't added a staff signup option because staff w
         
         if user is not None:
             auth.login(request, user)
-            return redirect(welcomestaff)
+            return redirect('/staffwelcome')
         else:
             messages.info(request, 'Credential invalid')
             return redirect('staff_login')
@@ -75,9 +83,6 @@ def staff_login(request):# i haven't added a staff signup option because staff w
 def Logout(request):
     logout(request)
     return redirect('index')
-
-def welcomestaff(request):
-    return render(request, 'welcomestaff.html')
 
 @login_required
 def add_appointment(request):
