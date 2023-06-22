@@ -10,7 +10,7 @@ urlpatterns = [
     path('welcome/', views.welcome, name='welcome'),
     path('accounts/logout/', LogoutView.as_view(next_page='/'), name='logout'),
     path('change_profile', views.changeprofile, name='changeprofile'),
-    path('profile/<str:patient_name>', views.profile, name='profile'),
+    path('profile/<int:id>', views.profile, name='profile'),
     path('staff_login', views.staff_login, name='staff_login'),
     path('logout', views.logout, name='logout'),
     path('staffwelcome', views.welcomestaff, name='welcomestaff'),
