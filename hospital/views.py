@@ -54,9 +54,9 @@ def changeprofile(request):
 
     return render(request, 'changeprofile.html', {'patient': patient})
 
-def profile(request, patient_name):
+def profile(request, id):
     try:
-        patient = Patient.objects.get(name=patient_name)
+        patient = Patient.objects.get(id=id)
         return render(request, 'profile.html', {'patient': patient})
     except Patient.DoesNotExist:
         return HttpResponse('Such profile doesnot exist')
