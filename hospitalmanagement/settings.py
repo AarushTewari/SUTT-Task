@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
+    'fuzzywuzzy',
+    'django_tables2'
 ]
 
 SITE_ID = 1
