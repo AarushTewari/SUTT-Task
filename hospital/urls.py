@@ -25,5 +25,5 @@ urlpatterns = [
     path('chatrooms/<str:patient>', views.room, name='room'),
     path('send', views.send, name='send'),
     path('getMessages/<str:patient>/', views.getMessages, name='getMessages'),
-    path('staff_dashboard/', views.staff_dashboard, name='staff_dashboard')    
+    path('staff_dashboard/', views.staff_dashboard, name='staff_dashboard')
 ]
