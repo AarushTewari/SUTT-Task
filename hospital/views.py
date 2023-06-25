@@ -23,11 +23,8 @@ def patient_login(request):
 def welcome(request):
     user = request.user
     patient = Patient.objects.get(email = user.email)
-    try:
-        room = Room.objects.get(patient=patient.name)
-    except Room.DoesNotExist:
-        room = Room.objects.create(name=patient.name)
-    return render(request, 'welcome.html', {'user': user, 'patient': patient, 'room': room}) 
+    rooms = Room.objects.filter(patient = patient.name)
+    return render(request, 'welcome.html', {'user': user, 'patient': patient, 'rooms': rooms}) 
 
 @receiver(user_logged_in)
 def create_patient(sender, user, request, **kwargs):
@@ -202,3 +199,4 @@ def staff_dashboard(request):
     table = PatientTable(patients)
 
     return render(request, 'staff_dashboard.html', {'table': table})
+
