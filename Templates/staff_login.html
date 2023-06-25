@@ -54,15 +54,9 @@
 <body>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6">
+            <div class="col-md-6 mt-5">
                 <div class="form-container">
                     <h3>Staff Login</h3>
-                    {% for message in messages %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ message }}
-                    </div>
-                    {% endfor %}
-
                     <form action="staff_login" method="POST">
                         {% csrf_token %}
                         <div class="form-group">
