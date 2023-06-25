@@ -38,6 +38,7 @@
             <a href="/accounts/logout" class="btn btn-danger">Logout</a>
             <a href="/change_profile" class="btn btn-primary">Create/Update Profile</a>
             <a href="{% url 'hospital:profile' patient.id %}" class="btn btn-primary">View Profile</a>
+            <a href="{% url 'hospital:room' patient.name %}" class="btn btn-success">Chat</a>
         </div>
     </div>
 
