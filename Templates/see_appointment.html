@@ -48,6 +48,13 @@
                     <h1 class="text-center heading-primary">Complain:</h1>
                     <p class="text-center">{{ appointment.complain }}</p>
                     <h4 class="text-center heading-tertiary">Status: {{ appointment.status }}</h4>
+                    <h1 class="text-center heading-primary">Cost:</h1>
+                    <h2 class="text-center heading-secondary">{{ appointment.cost }}</h2>
+                    {% if appointment.billing_status == 'pending' %}
+                    <h1 style="color: red;">Not Paid</h1>
+                    {% else %}
+                    <h1 style="color: green;">Paid</h1>
+                    {% endif %}
                 </div>
             </div>
         </div>
