@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Patient, Appointment, Staff
+from .models import Patient, Appointment, Room, message
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from .forms import PatientSearchForm
@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from .tables import PatientTable
 
 # Create your views here.
 
@@ -75,12 +76,12 @@ def staff_login(request):# i haven't added a staff signup option because staff w
             return redirect('/staffwelcome')
         else:
             messages.info(request, 'Credential invalid')
-            return redirect('staff_login')
+            return redirect('/staff_login')
     return render(request,'staff_login.html', {'user': request.user})
 
 def Logout(request):
     logout(request)
-    return redirect('index')
+    return redirect('/')
 
 @login_required
 def add_appointment(request):
@@ -129,3 +130,71 @@ def see_appointment(request, id):
         return render(request, 'see_appointment.html', {'appointment': appointment})
     except Appointment.DoesNotExist:
         return HttpResponse('Such appointment does not exist')
+    
+def change_appointment(request, id):
+    appointment = get_object_or_404(Appointment, id=id)
+
+    if request.method == 'POST':
+        status = request.POST.get('status')
+        cost = request.POST.get('cost')
+        billing_status = request.POST.get('billing_status')
+
+        appointment.status = status
+        appointment.cost = cost
+        appointment.billing_status = billing_status
+
+        appointment.save()
+        return redirect('/view_appointment')
+
+    return render(request, 'change_appointment.html', {'appointment': appointment})
+
+
+    
+    
+def patient_appointments(request):
+    patient = Patient.objects.get(email=request.user.email)
+    appointments = Appointment.objects.filter(patient=patient.id)
+    return render(request, 'patient_appointment.html', {'appointments': appointments})
+    
+def chatrooms(request):
+    rooms = Room.objects.all()
+    return render(request, 'chatrooms.html', {'rooms': rooms})
+
+def createroom(request):
+    room = request.POST['room_name']
+    patientname = request.POST['patient_name']
+
+    if Room.objects.filter(patient=patientname).exists():
+        return redirect("chatrooms/"+patientname)
+    else:
+        new_room = Room.objects.create(name=room, patient=patientname)
+        new_room.save()
+        return redirect('chatrooms')
+    
+def room(request, patient):
+    try:
+        user = request.user
+        room = Room.objects.get(patient=patient)
+        return render(request, 'room.html', {'room': room, 'user':user})
+    except Room.DoesNotExist:
+        return HttpResponse('No such room exists')
+    
+def send(request):
+    msg = request.POST['message']
+    username = request.user
+    room_id = request.POST['room_id']
+    new_message = message.objects.create(value=msg, user=username, room=room_id)
+    new_message.save()
+    return HttpResponse('Message sent successfully')
+
+def getMessages(request, patient):
+    room_details = Room.objects.get(patient=patient)
+    messages = message.objects.filter(room=room_details)
+
+    return JsonResponse({"messages":list(messages.values())})
+
+def staff_dashboard(request):
+    patients = Patient.objects.all()
+    table = PatientTable(patients)
+
+    return render(request, 'staff_dashboard.html', {'table': table})
