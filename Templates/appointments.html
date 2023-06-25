@@ -16,23 +16,34 @@
 		<table id="example" class="table table-striped table-bordered table-sm" style="width:80%">
 			<thead>
 				<tr>
+					<th>ID</th>
 					<th>Doctor Name</th>
 					<th>Patient Name</th>
                     <th>Date</th>
 					<th>Time</th>
 					<th>Action</th>
+					<th>Billing Status</th>
+                    <th>Payment</th>
 				</tr>
 			</thead>
 
 			<tbody>
             {% for i in appointments %}
 			  <tr>
+				<td>{{i.id}}</td>
 				<td>{{i.doctor}}</td>
 				<td>{{i.patient}}</td>
 				<td>{{i.date1}}</td>
 				<td>{{i.time1}}</td>
-                		<td>{{i.status}}</td>
+                <td>{{i.status}}</td>
+				<td>{{i.billing_status}}</td>
+                {% if i.billing_status == 'pending' %}
+                <td>{{i.cost}}</td>
+                {% else %}
+                <td>Payment Completed</td>
+                {% endif %}
 				<td><a href="{% url 'hospital:see_appointment' i.id %}"> View </a></td>
+				<td><a href="{% url 'hospital:change_appointment' i.id %}">Change</a></td>
 			  </tr>
 			
 			{% endfor %}
