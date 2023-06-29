@@ -45,6 +45,7 @@ class Appointment(models.Model):
     status = models.CharField(choices=STATUS_CHOICES, max_length=30, default='pending')
     cost = models.PositiveIntegerField(default=0)
     billing_status = models.CharField(choices=billing_status, max_length=30, default='pending')
+    prescription = models.TextField(default='None')
 
     def __str__(self):
        return self.patient.name
