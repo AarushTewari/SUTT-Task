@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js">
+    </script>
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js">
+    </script>
+ 
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet"
+        type="text/css" />
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #f1f1f1;
+          padding: 20px;
+        }
+      
+        h1 {
+          color: #333;
+          margin-bottom: 20px;
+        }
+      
+        button {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      
+        button:hover {
+          background-color: #45a049;
+        }
+      
+        form {
+          margin-top: 20px;
+        }
+      
+        input[type="text"] {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 10px;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          box-sizing: border-box;
+        }
+      
+        input[type="submit"] {
+          background-color: #4CAF50;
+          color: white;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+      
+        input[type="submit"]:hover {
+          background-color: #45a049;
+        }
+    </style>
+  </head>
+
+  <body>
+    <h1>Existing Chats</h1>
+    {% for room in rooms %}
+      <a href="chatrooms/{{room.patient}}">
+        <button>{{room.name}}</button>
+      </a>
+    {% endfor %}
+    
+    <h1>Join or Create Room</h1>
+    <form action="createroom" method="POST">
+      {% csrf_token %}
+      <input type="text" placeholder="Enter room name" name="room_name">
+      <input type="text" placeholder="Enter patient you want to talk to" name="patient_name" id="patient_name">
+      <input type="submit" value="Join/Create Room">      
+    </form>
+    <script>
+      $(function() {
+        var availableTags = [
+          {% for patient in patients %}
+            "{{ patient.name }}",
+          {% endfor %}
+        ];
+    
+        $("#patient_name").autocomplete({
+          source: availableTags
+        });
+      });
+    </script>      
+  </body>
+</html>

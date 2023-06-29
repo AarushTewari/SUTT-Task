@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <title>Hospital Management System</title>
+    <link rel="icon" href="{% static 'images/favicon.ico' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <style>
+        body {
+            background-color: #f0f1f2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .btn-danger,
+        .btn-primary {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Welcome {{ user.username }}</h1>
+        <div class="text-center">
+            <a href="/accounts/logout" class="btn btn-danger">Logout</a>
+            <a href="/change_profile" class="btn btn-primary">Create/Update Profile</a>
+            <a href="{% url 'hospital:profile' patient.id %}" class="btn btn-primary">View Profile</a>
+            <div class="container">
+                <h2>Chat Rooms</h2>
+                {% if rooms %}
+                    <ul>
+                        {% for room in rooms %}
+                            <li><a href="/chatrooms/{{room.patient}}">{{ room.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No chat rooms available.</p>
+                {% endif %}
+            </div>
+                
+        </div>
+    </div>
+
+    {% block body %}
+    {% endblock %}
+
+</body>
+</html>
