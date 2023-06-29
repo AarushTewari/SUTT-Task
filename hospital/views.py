@@ -173,10 +173,12 @@ def change_appointment(request, id):
         status = request.POST.get('status')
         cost = request.POST.get('cost')
         billing_status = request.POST.get('billing_status')
+        prescription = request.POST['prescription']
 
         appointment.status = status
         appointment.cost = cost
         appointment.billing_status = billing_status
+        appointment.prescription = prescription
 
         appointment.save()
         return redirect('/view_appointment')
