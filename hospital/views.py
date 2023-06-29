@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Patient, Appointment, Room, message
+from .models import Patient, Appointment, Room, message, Staff
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 from .forms import PatientSearchForm
@@ -10,6 +10,10 @@ from django.dispatch import receiver
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, JsonResponse
 from .tables import PatientTable
+from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+from django_tables2 import RequestConfig
+from django.db.models import Q
 
 # Create your views here.
 
@@ -22,19 +26,15 @@ def patient_login(request):
 @login_required
 def welcome(request):
     user = request.user
-    patient = Patient.objects.get(email = user.email)
-    rooms = Room.objects.filter(patient = patient.name)
-    return render(request, 'welcome.html', {'user': user, 'patient': patient, 'rooms': rooms}) 
-
-@receiver(user_logged_in)
-def create_patient(sender, user, request, **kwargs):
-    if not Patient.objects.filter(email=user.email).exists():
-        # Create a new patient with the user's email
+    try:
+        patient = Patient.objects.get(email=user.email)
+        rooms = Room.objects.filter(patient=patient)
+    except Patient.DoesNotExist:
         patient = Patient.objects.create(email=user.email)
-        patient.save()
-
-
-
+        rooms = []
+    
+    return render(request, 'welcome.html', {'user': user, 'patient': patient, 'rooms': rooms})
+    
 @login_required
 def changeprofile(request):
     user = request.user
@@ -46,6 +46,9 @@ def changeprofile(request):
         age = request.POST['age']
         address = request.POST['address']
 
+        if Patient.objects.filter(name=name).exists():
+            messages.info(request, 'Name taken')
+            return redirect('hospital:change_profile')
         patient.name = name
         patient.gender = gender
         patient.age = age
@@ -62,23 +65,57 @@ def profile(request, id):
         return render(request, 'profile.html', {'patient': patient})
     except Patient.DoesNotExist:
         return HttpResponse('Such profile doesnot exist')
-
+    
+@login_required
 def welcomestaff(request):
     return render(request, 'welcomestaff.html')
 
-def staff_login(request):# i haven't added a staff signup option because staff will be added from admin panel, obviously we dont want rsndom people accessing the site and signing up as staff
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('hospital:welcomestaff')
     if request.method == 'POST':
-        u = request.POST['username']
-        p = request.POST['password']
-        user = auth.authenticate(username=u, password=p)
-        
+        if request.POST['secret'] == 'secret':
+           username = request.POST['username']
+           email = request.POST['email']
+           password = request.POST['password']
+           password2 = request.POST['password2'] 
+
+           if password == password2:
+               if User.objects.filter(email=email).exists():
+                   messages.info(request, 'Email taken')
+                   return redirect('hospital:register')
+               elif User.objects.filter(username=username).exists():
+                   messages.info(request, 'Username taken')
+                   return redirect('hospital:register')
+               else:
+                   user = User.objects.create_user(username=username, email=email, password=password)
+                   user.save()
+                   staff = Staff.objects.create(username=username, email=email)
+                   staff.save()
+                   user = authenticate(request, username=username, password=password)
+                   login(request, user)
+                   return redirect('/staffwelcome')
+           else:
+               messages.info(request, 'Passwords donot match')
+               return redirect('hospital:register')
+        else:
+            messages.info(request, 'Incorrect secret')
+            return redirect('hospital:register')
+    else:
+        return render(request, 'register.html')
+
+def staff_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
         if user is not None:
-            auth.login(request, user)
+            login(request, user)
             return redirect('/staffwelcome')
         else:
-            messages.info(request, 'Credential invalid')
-            return redirect('/staff_login')
-    return render(request,'staff_login.html', {'user': request.user})
+            error_message = 'Invalid email or password'
+            return render(request, 'staff_login.html', {'error_message': error_message})
+    return render(request, 'staff_login.html')
 
 def Logout(request):
     logout(request)
@@ -117,11 +154,8 @@ def search_patients(request):
         form = PatientSearchForm(request.GET)
         if form.is_valid():
             query = form.cleaned_data['query']
-            patients = Patient.objects.all()
-            patient_names = [patient.name for patient in patients]
-            extracted_results = process.extract(query, patient_names, scorer=fuzz.token_sort_ratio, limit=10)
-            matched_names = [result[0] for result in extracted_results if result[1] >= 70]
-            results = patients.filter(name__in=matched_names)
+            patients = Patient.objects.filter(Q(name__icontains=query))
+            results = patients[:10]
 
     return render(request, 'search_users.html', {'form': form, 'results': results})
 
@@ -156,11 +190,14 @@ def patient_appointments(request):
     patient = Patient.objects.get(email=request.user.email)
     appointments = Appointment.objects.filter(patient=patient.id)
     return render(request, 'patient_appointment.html', {'appointments': appointments})
-    
+
+@login_required    
 def chatrooms(request):
     rooms = Room.objects.all()
-    return render(request, 'chatrooms.html', {'rooms': rooms})
+    patients = Patient.objects.all()
+    return render(request, 'chatrooms.html', {'rooms': rooms, 'patients':patients})
 
+@login_required
 def createroom(request):
     room = request.POST['room_name']
     patientname = request.POST['patient_name']
@@ -170,8 +207,9 @@ def createroom(request):
     else:
         new_room = Room.objects.create(name=room, patient=patientname)
         new_room.save()
-        return redirect('chatrooms')
-    
+        return redirect('hospital:chatrooms')
+
+@login_required   
 def room(request, patient):
     try:
         user = request.user
@@ -194,9 +232,21 @@ def getMessages(request, patient):
 
     return JsonResponse({"messages":list(messages.values())})
 
+from django.core.paginator import Paginator
+
+@login_required
 def staff_dashboard(request):
     patients = Patient.objects.all()
     table = PatientTable(patients)
+    
+    # Pagination
+    paginator = Paginator(table.rows, 1)  
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    RequestConfig(request, paginate={'per_page': 1}).configure(table)
+    
+    return render(request, 'staff_dashboard.html', {'table': table, 'page_obj': page_obj})
 
-    return render(request, 'staff_dashboard.html', {'table': table})
+
 
