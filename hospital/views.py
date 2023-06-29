@@ -234,8 +234,6 @@ def getMessages(request, patient):
 
     return JsonResponse({"messages":list(messages.values())})
 
-from django.core.paginator import Paginator
-
 @login_required
 def staff_dashboard(request):
     patients = Patient.objects.all()
