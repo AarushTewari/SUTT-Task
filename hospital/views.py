@@ -46,9 +46,6 @@ def changeprofile(request):
         age = request.POST['age']
         address = request.POST['address']
 
-        if Patient.objects.filter(name=name).exists():
-            messages.info(request, 'Name taken')
-            return redirect('hospital:change_profile')
         patient.name = name
         patient.gender = gender
         patient.age = age
