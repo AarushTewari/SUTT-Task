@@ -45,10 +45,11 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'fuzzywuzzy',
-    'django_tables2'
+    'django_tables2',
+    'crispy_forms',
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
