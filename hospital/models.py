@@ -12,6 +12,13 @@ class Patient(models.Model):
 
     def __str__(self):
        return self.name
+    
+class Staff(models.Model):
+    username = models.CharField(max_length=50)
+    email = models.EmailField(null=True, unique=True)
+
+    def __str__(self):
+       return self.username
 
 class Appointment(models.Model):
     STATUS_CHOICES = [
@@ -43,7 +50,7 @@ class Appointment(models.Model):
        return self.patient.name
     
 class Room(models.Model):
-    name = models.CharField(max_length=1000)
+    name = models.CharField(max_length=1000, null=True)
     patient = models.CharField(max_length=200, null=True)
     def __str__(self):
        return self.patient
