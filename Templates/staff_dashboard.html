@@ -10,10 +10,26 @@
     .container {
         margin-top: 50px;
     }
+    
+    .container table {
+        width: 100%;
+    }
+    
+    .container th {
+        font-weight: bold;
+        text-align: center;
+        background-color: #f2f2f2;
+    }
+    
+    .container td {
+        text-align: center;
+    }
 </style>
 
-<div class="container table table-striped">
-    {% render_table table %}
+<div class="container">
+    <table class="table table-striped">
+        {% render_table table %}
+    </table>
 </div>
 
 {% endblock content %}
